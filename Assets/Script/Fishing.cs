@@ -58,7 +58,6 @@ public class Fishing : MonoBehaviour
 
         if (Input.GetMouseButtonUp(1))
         {
-            // ResetHook();
             StopReelSound();
         }
 
@@ -73,7 +72,6 @@ public class Fishing : MonoBehaviour
 
             if (currentHookSpeed == maxHookSpeed)
             {
-                // ThrowHook();
                 StopReelSound();
                 animator.SetTrigger("Release");
             }
@@ -81,7 +79,6 @@ public class Fishing : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0) && isChargingThrow)
         {
-            //ThrowHook();
             StopReelSound();
 
             animator.SetTrigger("Release");
@@ -95,7 +92,7 @@ public class Fishing : MonoBehaviour
 
             if (isHooked)
             {
-                if (Input.GetMouseButton(0))
+                if (Input.GetMouseButton(1))
                 {
                     hookedTime += Time.deltaTime;
 
