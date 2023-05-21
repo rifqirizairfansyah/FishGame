@@ -15,7 +15,7 @@ public class Fishing : MonoBehaviour
     public float maxRodRotation = 45f;
     public float rodRotationSpeed = 45f;
 
-    //private Animator animator;
+    private Animator animator;
 
     private bool isChargingThrow = false;
     private bool isHookThrown = false;
@@ -28,6 +28,7 @@ public class Fishing : MonoBehaviour
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         powerSlider = GameObject.FindGameObjectWithTag("PowerSlider").GetComponent<Slider>();
         currentHookSpeed = hookSpeed;
         initialRodRotation = hookSpawner.rotation;
@@ -36,7 +37,6 @@ public class Fishing : MonoBehaviour
         powerSlider.minValue = 0f;
         powerSlider.maxValue = maxHookSpeed - hookSpeed;
         powerSlider.value = 0f;
-        //animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -52,6 +52,7 @@ public class Fishing : MonoBehaviour
             }
             else
             {
+                animator.Play("CastingHold");
                 isChargingThrow = true;
             }
         }
@@ -69,17 +70,19 @@ public class Fishing : MonoBehaviour
             hookSpawner.rotation = initialRodRotation * Quaternion.Euler(-rodRotationAmount, 0f, 0f);
             powerSlider.value = currentHookSpeed - hookSpeed;
 
-            //animator.speed = maxHookSpeed / currentHookSpeed;
 
             if (currentHookSpeed == maxHookSpeed)
             {
                 ThrowHook();
+                animator.SetTrigger("Release");
             }
         }
 
         if (Input.GetMouseButtonUp(0) && isChargingThrow)
         {
             ThrowHook();
+
+            animator.SetTrigger("Release");
         }
 
         if (isHookThrown)
@@ -118,7 +121,6 @@ public class Fishing : MonoBehaviour
             powerSlider.value = 0f;
 
             hookScript.DestroyRippleEffect();
-            //animator.Play("Casting");
 
             return true;
         }
@@ -137,8 +139,6 @@ public class Fishing : MonoBehaviour
         isHookThrown = true;
         line.enabled = true;
         powerSlider.value = 0f;
-        //animator.SetTrigger("ThrowHook");
-        //animator.Play("Casting");
     }
 
     IEnumerator RotateRodBack()
