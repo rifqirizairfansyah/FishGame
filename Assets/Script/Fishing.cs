@@ -26,6 +26,7 @@ public class Fishing : MonoBehaviour
     private float hookedTime = 0f;
     private Hook hookScript;
 
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -43,14 +44,7 @@ public class Fishing : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (isHookThrown)
-            {
-                if (!isHooked)
-                {
-                    ResetHook();
-                }
-            }
-            else
+            if (!isHookThrown)
             {
                 animator.Play("CastingHold");
                 isChargingThrow = true;
@@ -59,7 +53,7 @@ public class Fishing : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
-            ResetHook();
+            // ResetHook();
         }
 
         if (isChargingThrow)
@@ -73,14 +67,14 @@ public class Fishing : MonoBehaviour
 
             if (currentHookSpeed == maxHookSpeed)
             {
-                ThrowHook();
+               // ThrowHook();
                 animator.SetTrigger("Release");
             }
         }
 
         if (Input.GetMouseButtonUp(0) && isChargingThrow)
         {
-            ThrowHook();
+            //ThrowHook();
 
             animator.SetTrigger("Release");
         }
@@ -105,6 +99,13 @@ public class Fishing : MonoBehaviour
                 else
                 {
                     hookedTime = 0f;
+                }
+            }
+            else
+            {
+                if (Input.GetMouseButton(1))
+                {
+                    currentHook.transform.position = Vector3.MoveTowards(currentHook.transform.position, hookSpawner.position, hookSpeed * Time.deltaTime);
                 }
             }
         }

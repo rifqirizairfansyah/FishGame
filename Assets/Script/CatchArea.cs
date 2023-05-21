@@ -24,6 +24,10 @@ public class CatchArea : MonoBehaviour
                     Destroy(fish.gameObject);
                 }
             }
+        } else
+        {
+            Fishing fishing = FindObjectOfType<Fishing>();
+            fishing.ResetHook();
         }
     }
 }
