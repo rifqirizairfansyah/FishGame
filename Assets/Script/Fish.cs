@@ -6,6 +6,7 @@ using UnityEngine;
 public class Fish : MonoBehaviour
 {
 
+    public float length = 1f;
     public float weight = 1f;
     public string fishName = "Fish";
     public string description = "A fish";
@@ -28,6 +29,8 @@ public class Fish : MonoBehaviour
     {
         direction = new Vector3(UnityEngine.Random.Range(-1f, 1f), 0f, UnityEngine.Random.Range(-1f, 1f)).normalized;
         currentEatTime = eatTime;
+        length = Mathf.Round(UnityEngine.Random.Range(18f, 24f) * 100f) / 100f;
+        weight = Mathf.Round(((length - 18f) * (0.5f - 0.3f) / (24f - 18f) + 0.3f) * 100f) / 100f;
     }
 
     void Update()
@@ -82,12 +85,14 @@ public class Fish : MonoBehaviour
                 }
                 currentEatTime = eatTime;
             }
+            transform.LookAt(transform.position + direction);
         }
         else
         {
             if (hook != null)
             {
                 transform.position = Vector3.MoveTowards(transform.position, hook.transform.position, eatSpeed * Time.deltaTime);
+                transform.LookAt(hook.transform);
             }
             else
             {

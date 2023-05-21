@@ -13,6 +13,14 @@ public class Hook : MonoBehaviour
     private GameObject currentRipple;
     private bool hasInstantiated = false;
 
+    public AudioClip touchWaterSound;
+    private AudioSource audioSource;
+
+    private void Start()
+    {
+        audioSource = gameObject.AddComponent<AudioSource>();
+    }
+
     void FixedUpdate()
     {
         if (!isTouchingWater)
@@ -23,7 +31,14 @@ public class Hook : MonoBehaviour
                 WaterObject waterObject = hit.collider.GetComponent<WaterObject>();
                 if (waterObject != null)
                 {
+                    Fishing fishing = FindObjectOfType<Fishing>();
+                    if (fishing != null)
+                    {
+                        fishing.StopReelSound();
+                    }
+
                     isTouchingWater = true;
+                    audioSource.PlayOneShot(touchWaterSound);
                     FloatingTransform floatingTransform = GetComponent<FloatingTransform>();
                     if (floatingTransform != null)
                     {
@@ -58,11 +73,12 @@ public class Hook : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision);
         if (collision.gameObject.layer == LayerMask.NameToLayer("Water"))
         {
+            Debug.Log("Hit Water");
             isTouchingWater = true;
             
+
         }
     }
 

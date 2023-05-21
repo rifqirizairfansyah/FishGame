@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,6 +27,9 @@ public class Fishing : MonoBehaviour
     private float hookedTime = 0f;
     private Hook hookScript;
 
+    public AudioClip reelSound;
+    public AudioClip touchWaterSound;
+    private AudioSource audioSource;
 
     void Start()
     {
@@ -38,22 +42,24 @@ public class Fishing : MonoBehaviour
         powerSlider.minValue = 0f;
         powerSlider.maxValue = maxHookSpeed - hookSpeed;
         powerSlider.value = 0f;
+        audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (!isHookThrown)
+            if (!isHookThrown && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
                 animator.Play("CastingHold");
                 isChargingThrow = true;
             }
         }
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonUp(1))
         {
             // ResetHook();
+            StopReelSound();
         }
 
         if (isChargingThrow)
@@ -67,7 +73,8 @@ public class Fishing : MonoBehaviour
 
             if (currentHookSpeed == maxHookSpeed)
             {
-               // ThrowHook();
+                // ThrowHook();
+                StopReelSound();
                 animator.SetTrigger("Release");
             }
         }
@@ -75,9 +82,11 @@ public class Fishing : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && isChargingThrow)
         {
             //ThrowHook();
+            StopReelSound();
 
             animator.SetTrigger("Release");
         }
+
 
         if (isHookThrown)
         {
@@ -94,21 +103,50 @@ public class Fishing : MonoBehaviour
                     {
                         currentHook.transform.position = Vector3.MoveTowards(currentHook.transform.position, hookSpawner.position, hookSpeed * Time.deltaTime);
                         hookScript.DestroyRippleEffect();
+                        PlayReelSound();
+                        pullingAnimatoin(true);
                     }
                 }
                 else
                 {
                     hookedTime = 0f;
+                    pullingAnimatoin(false);
+                    StopReelSound();
                 }
             }
             else
             {
                 if (Input.GetMouseButton(1))
                 {
+
+                    PlayReelSound();
+                    pullingAnimatoin(true);
                     currentHook.transform.position = Vector3.MoveTowards(currentHook.transform.position, hookSpawner.position, hookSpeed * Time.deltaTime);
                 }
+                else
+                {
+                    pullingAnimatoin(false);
+
+                }
+
             }
         }
+    }
+
+    public void pullingAnimatoin (Boolean value)
+    {
+        animator.SetBool("PullingHook", value);
+    }
+
+    public void PlayReelSound()
+    {
+        audioSource.clip = reelSound;
+        audioSource.Play();
+    }
+
+    public void StopReelSound()
+    {
+        audioSource.Stop();
     }
 
     public bool ResetHook()
@@ -122,6 +160,7 @@ public class Fishing : MonoBehaviour
             powerSlider.value = 0f;
 
             hookScript.DestroyRippleEffect();
+            StopReelSound();
 
             return true;
         }
@@ -140,6 +179,7 @@ public class Fishing : MonoBehaviour
         isHookThrown = true;
         line.enabled = true;
         powerSlider.value = 0f;
+        PlayReelSound();
     }
 
     IEnumerator RotateRodBack()
