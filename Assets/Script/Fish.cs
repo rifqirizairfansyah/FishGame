@@ -19,6 +19,9 @@ public class Fish : MonoBehaviour
     public float eatRadius = 1f;
     public float eatChance = 0.5f;
 
+    public AudioClip fishEatSound;
+    private AudioSource audioSource;
+
     private GameObject hook;
     private Vector3 direction;
     private float currentEatTime;
@@ -31,6 +34,7 @@ public class Fish : MonoBehaviour
         currentEatTime = eatTime;
         length = Mathf.Round(UnityEngine.Random.Range(18f, 24f) * 100f) / 100f;
         weight = Mathf.Round(((length - 18f) * (0.5f - 0.3f) / (24f - 18f) + 0.3f) * 100f) / 100f;
+        audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     void Update()
@@ -69,6 +73,7 @@ public class Fish : MonoBehaviour
                             isEating = true;
                             if (fishing != null)
                             {
+                                audioSource.PlayOneShot(fishEatSound);
                                 fishing.SetIsHooked(true);
                                 ResetEatTime();
                             }

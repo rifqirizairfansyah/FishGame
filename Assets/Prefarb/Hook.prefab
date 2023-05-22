@@ -154,6 +154,7 @@ MonoBehaviour:
     type: 3}
   rippleEffect: {fileID: 7747201256579168942, guid: 63656e13f1f71ae49900cb61fa7cd47e,
     type: 3}
+  fishEatSound: {fileID: 0}
   touchWaterSound: {fileID: 8300000, guid: 9bb1c3ea2f33c0c4d869e4f0f7ea21e1, type: 3}
 --- !u!135 &1158053147668807656
 SphereCollider:
@@ -188,7 +189,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0

@@ -2491,7 +2491,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 551903459}
   m_Direction: 2
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 25
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
@@ -15064,7 +15064,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 085e8855c3e79c442a8c19f9e9ae9c84, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 5a75d994d07b29c4ca4764b3ba5a6106, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.5
   m_Pitch: 1
@@ -24725,9 +24725,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.22002, y: -70.207}
-  m_SizeDelta: {x: 141.32, y: 42.043}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 1.0161, y: -94.107}
+  m_SizeDelta: {x: 189.55, y: 60.151}
+  m_Pivot: {x: 0.5, y: 0.5000002}
 --- !u!114 &1664165175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25251,7 +25251,7 @@ GameObject:
   - component: {fileID: 1676937099}
   - component: {fileID: 1676937098}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: TextGuide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29410,7 +29410,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Pulling
+  m_text: Pull (Hold)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -30990,11 +30990,14 @@ MonoBehaviour:
   hookSpawner: {fileID: 1657029869}
   line: {fileID: 1976926879}
   powerSlider: {fileID: 0}
-  hookSpeed: 8
+  hookSpeed: 5
+  pullingSpeed: 8
   maxHookSpeed: 25
-  hookSpeedIncreaseRate: 10
+  hookSpeedIncreaseRate: 5
   maxRodRotation: 45
   rodRotationSpeed: 45
+  parabolicEffect: 2
+  textUIGuide: {fileID: 0}
   reelSound: {fileID: 8300000, guid: 345db893e3565b54a866686bff700cd9, type: 3}
   touchWaterSound: {fileID: 8300000, guid: 9bb1c3ea2f33c0c4d869e4f0f7ea21e1, type: 3}
 --- !u!65 &2025849823
@@ -31413,7 +31416,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2047037568
 RectTransform:
   m_ObjectHideFlags: 0
@@ -31455,7 +31458,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ea98a89a85b352148a89be8f7c978b02, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 484d88a99be48e74e979072035742401, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1

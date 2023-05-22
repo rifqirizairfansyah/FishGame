@@ -25,6 +25,7 @@ public class CatchArea : MonoBehaviour
         if (fish != null)
         {
             Fishing fishing = FindObjectOfType<Fishing>();
+            fishing.textGuideThrow();
 
             if (fishing != null && fishing.GetIsHooked())
             {
@@ -43,6 +44,7 @@ public class CatchArea : MonoBehaviour
         {
             Fishing fishing = FindObjectOfType<Fishing>();
             fishing.pullingAnimatoin(false);
+            fishing.textGuideThrow();
             fishing.ResetHook();
         }
     }

@@ -137,7 +137,6 @@ MonoBehaviour:
     and German cuisine, though some parts of Asia and the Caribbean have also taken
     to the food. Herring is a versatile fish beloved for its small size, firm and
     silky flesh, and ability to be prepared in a variety of ways
-  mounth: {fileID: 8440502442608658076}
   speed: 1.2
   eatSpeed: 10
   minBounds: {x: 0, y: 0, z: 0}
@@ -145,6 +144,7 @@ MonoBehaviour:
   eatTime: 3
   eatRadius: 5
   eatChance: 0.5
+  fishEatSound: {fileID: 8300000, guid: c460c7f7e1281e346ab742d89a9a8e54, type: 3}
 --- !u!54 &4064811377172428118
 Rigidbody:
   m_ObjectHideFlags: 0

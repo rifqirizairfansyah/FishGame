@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,10 +12,12 @@ public class Fishing : MonoBehaviour
     public LineRenderer line;
     public Slider powerSlider;
     public float hookSpeed = 10f;
+    public float pullingSpeed = 8f;
     public float maxHookSpeed = 20f;
     public float hookSpeedIncreaseRate = 1f;
     public float maxRodRotation = 45f;
     public float rodRotationSpeed = 45f;
+    public float parabolicEffect = 5f;
 
     private Animator animator;
 
@@ -26,6 +29,7 @@ public class Fishing : MonoBehaviour
     private GameObject currentHook;
     private float hookedTime = 0f;
     private Hook hookScript;
+    public TextMeshProUGUI textUIGuide;
 
     public AudioClip reelSound;
     public AudioClip touchWaterSound;
@@ -35,6 +39,7 @@ public class Fishing : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         powerSlider = GameObject.FindGameObjectWithTag("PowerSlider").GetComponent<Slider>();
+        textUIGuide = GameObject.Find("TextGuide").GetComponent<TextMeshProUGUI>();
         currentHookSpeed = hookSpeed;
         initialRodRotation = hookSpawner.rotation;
         line.positionCount = 2;
@@ -43,6 +48,7 @@ public class Fishing : MonoBehaviour
         powerSlider.maxValue = maxHookSpeed - hookSpeed;
         powerSlider.value = 0f;
         audioSource = gameObject.AddComponent<AudioSource>();
+        textGuideThrow();
     }
 
     void Update()
@@ -54,11 +60,27 @@ public class Fishing : MonoBehaviour
                 animator.Play("CastingHold");
                 isChargingThrow = true;
             }
-        }
+            else if (isHookThrown)
+            {
+                textGuidePull();
+                if (isHooked)
+                {
+                    hookedTime += Time.deltaTime;
 
-        if (Input.GetMouseButtonUp(1))
-        {
-            StopReelSound();
+                    if (hookedTime > 1f)
+                    {
+                        currentHook.transform.position = Vector3.MoveTowards(currentHook.transform.position, hookSpawner.position, pullingSpeed * Time.deltaTime);
+                        PlayReelSound();
+                        pullingAnimatoin(true);
+                    }
+                }
+                else
+                {
+                    PlayReelSound();
+                    pullingAnimatoin(true);
+                    currentHook.transform.position = Vector3.MoveTowards(currentHook.transform.position, hookSpawner.position, pullingSpeed * Time.deltaTime);
+                }
+            }
         }
 
         if (isChargingThrow)
@@ -68,13 +90,6 @@ public class Fishing : MonoBehaviour
             float rodRotationAmount = Mathf.Lerp(0f, maxRodRotation, (currentHookSpeed - hookSpeed) / (maxHookSpeed - hookSpeed));
             hookSpawner.rotation = initialRodRotation * Quaternion.Euler(-rodRotationAmount, 0f, 0f);
             powerSlider.value = currentHookSpeed - hookSpeed;
-
-
-            if (currentHookSpeed == maxHookSpeed)
-            {
-                StopReelSound();
-                animator.SetTrigger("Release");
-            }
         }
 
         if (Input.GetMouseButtonUp(0) && isChargingThrow)
@@ -84,6 +99,10 @@ public class Fishing : MonoBehaviour
             animator.SetTrigger("Release");
         }
 
+        if (Input.GetMouseButtonUp(0))
+        {
+            StopReelSound();
+        }
 
         if (isHookThrown)
         {
@@ -92,14 +111,13 @@ public class Fishing : MonoBehaviour
 
             if (isHooked)
             {
-                if (Input.GetMouseButton(1))
+                if (Input.GetMouseButton(0))
                 {
                     hookedTime += Time.deltaTime;
 
                     if (hookedTime > 1f)
                     {
-                        currentHook.transform.position = Vector3.MoveTowards(currentHook.transform.position, hookSpawner.position, hookSpeed * Time.deltaTime);
-                        hookScript.DestroyRippleEffect();
+                        currentHook.transform.position = Vector3.MoveTowards(currentHook.transform.position, hookSpawner.position, pullingSpeed * Time.deltaTime);
                         PlayReelSound();
                         pullingAnimatoin(true);
                     }
@@ -113,12 +131,12 @@ public class Fishing : MonoBehaviour
             }
             else
             {
-                if (Input.GetMouseButton(1))
+                if (Input.GetMouseButton(0))
                 {
 
                     PlayReelSound();
                     pullingAnimatoin(true);
-                    currentHook.transform.position = Vector3.MoveTowards(currentHook.transform.position, hookSpawner.position, hookSpeed * Time.deltaTime);
+                    currentHook.transform.position = Vector3.MoveTowards(currentHook.transform.position, hookSpawner.position, pullingSpeed * Time.deltaTime);
                 }
                 else
                 {
@@ -128,6 +146,15 @@ public class Fishing : MonoBehaviour
 
             }
         }
+    }
+
+    public void textGuideThrow() {
+        textUIGuide.text = "Throw (Hold)";
+    }
+
+    public void textGuidePull()
+    {
+        textUIGuide.text = "Pull (Hold)";
     }
 
     public void pullingAnimatoin (Boolean value)
@@ -171,6 +198,7 @@ public class Fishing : MonoBehaviour
         Rigidbody rb = currentHook.GetComponent<Rigidbody>();
         hookScript = currentHook.gameObject.GetComponent<Hook>();
         rb.velocity = transform.forward * currentHookSpeed;
+        rb.AddForce(Vector3.up * parabolicEffect, ForceMode.Impulse);
         currentHookSpeed = hookSpeed;
         StartCoroutine(RotateRodBack());
         isHookThrown = true;
