@@ -145,6 +145,7 @@ MonoBehaviour:
   eatRadius: 5
   eatChance: 0.5
   fishEatSound: {fileID: 8300000, guid: c460c7f7e1281e346ab742d89a9a8e54, type: 3}
+  hook: {fileID: 8188074755541933394, guid: 826a43fdb4f9cf7428b4b520c3af9dcd, type: 3}
 --- !u!54 &4064811377172428118
 Rigidbody:
   m_ObjectHideFlags: 0

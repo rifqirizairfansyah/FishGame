@@ -22,7 +22,7 @@ public class Fish : MonoBehaviour
     public AudioClip fishEatSound;
     private AudioSource audioSource;
 
-    private GameObject hook;
+    public GameObject hook;
     private Vector3 direction;
     private float currentEatTime;
 
@@ -47,48 +47,23 @@ public class Fish : MonoBehaviour
                 Fishing fishing = FindObjectOfType<Fishing>();
                 if (fishing != null && fishing.GetIsHooked())
                 {
-                    transform.position += direction * speed * Time.deltaTime;
-                    if (transform.position.x < minBounds.x || transform.position.x > maxBounds.x || transform.position.z < minBounds.z || transform.position.z > maxBounds.z)
-                    {
-                        direction = new Vector3(-direction.x, 0f, -direction.z);
-                    }
-                    currentEatTime = eatTime;
+                    MoveFish();
                 }
                 else
                 {
                     currentEatTime -= Time.deltaTime;
-                    if (currentEatTime <= 0f && UnityEngine.Random.value < eatChance)
+                    if (currentEatTime <= 0f && UnityEngine.Random.value < eatChance && CanEat())
                     {
-                        Fish[] otherFish = FindObjectsOfType<Fish>();
-                        bool canEat = true;
-                        foreach (Fish fish in otherFish)
-                        {
-                            if (fish != this && fish.isEating)
-                            {
-                                canEat = false; break;
-                            }
-                        }
-                        if (canEat)
-                        {
-                            isEating = true;
-                            if (fishing != null)
-                            {
-                                audioSource.PlayOneShot(fishEatSound);
-                                fishing.SetIsHooked(true);
-                                ResetEatTime();
-                            }
-                        }
+                        isEating = true;
+                        audioSource.PlayOneShot(fishEatSound);
+                        fishing.SetIsHooked(true);
+                        ResetEatTime();
                     }
                 }
             }
             else
             {
-                transform.position += direction * speed * Time.deltaTime;
-                if (transform.position.x < minBounds.x || transform.position.x > maxBounds.x || transform.position.z < minBounds.z || transform.position.z > maxBounds.z)
-                {
-                    direction = new Vector3(-direction.x, 0f, -direction.z);
-                }
-                currentEatTime = eatTime;
+                MoveFish();
             }
             transform.LookAt(transform.position + direction);
         }
@@ -107,6 +82,26 @@ public class Fish : MonoBehaviour
         }
     }
 
+    void MoveFish()
+    {
+        transform.position += direction * speed * Time.deltaTime;
+        if (transform.position.x < minBounds.x || transform.position.x > maxBounds.x || transform.position.z < minBounds.z || transform.position.z > maxBounds.z)
+        {
+            direction = new Vector3(-direction.x, 0f, -direction.z);
+        }
+        currentEatTime = eatTime;
+    }
+
+    bool CanEat()
+    {
+        Fish[] otherFish = FindObjectsOfType<Fish>();
+        foreach (Fish fish in otherFish)
+        {
+            if (fish != this && fish.isEating) return false;
+        }
+        return true;
+    }
+
     void ResetEatTime()
     {
         Fish[] otherFish = FindObjectsOfType<Fish>();
@@ -118,7 +113,6 @@ public class Fish : MonoBehaviour
                 fish.currentEatTime = eatTime;
             }
         }
-
     }
 
     void OnDrawGizmosSelected()
