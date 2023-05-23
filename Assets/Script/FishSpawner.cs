@@ -15,6 +15,7 @@ public class FishSpawner : MonoBehaviour
         Vector3 halfSize = (maxBounds - minBounds) / 2f;
         Vector3 newMinBounds = center - halfSize;
         Vector3 newMaxBounds = center + halfSize;
+
         for (int i = 0; i < fishCount; i++)
         {
             Vector3 position = new Vector3(

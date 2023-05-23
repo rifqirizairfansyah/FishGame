@@ -17,22 +17,23 @@ public class Hook : MonoBehaviour
     public AudioClip touchWaterSound;
     private AudioSource audioSource;
 
+    private Fishing fishing;
+
     private void Start()
     {
         audioSource = gameObject.AddComponent<AudioSource>();
+        fishing = FindObjectOfType<Fishing>();
     }
 
     void FixedUpdate()
     {
         if (!isTouchingWater)
         {
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, Vector3.down, out hit, raycastDistance))
+            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, raycastDistance))
             {
                 WaterObject waterObject = hit.collider.GetComponent<WaterObject>();
                 if (waterObject != null)
                 {
-                    Fishing fishing = FindObjectOfType<Fishing>();
                     fishing.textGuidePull();
                     if (fishing != null)
                     {

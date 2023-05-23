@@ -148,7 +148,8 @@ public class Fishing : MonoBehaviour
         }
     }
 
-    public void textGuideThrow() {
+    public void textGuideThrow()
+    {
         textUIGuide.text = "Throw (Hold)";
     }
 
